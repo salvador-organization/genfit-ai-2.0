@@ -17,8 +17,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Criado com a Lasy",
-  description: "Projeto criado com Lasy AI",
+  title: "FitAI - Treino e Dieta Personalizados por IA",
+  description: "Plano de treino e dieta 100% personalizado em minutos — criado por IA com base no seu corpo, objetivo, rotina e preferências.",
+  keywords: ["treino personalizado", "dieta personalizada", "IA fitness", "personal trainer", "nutrição", "emagrecimento", "ganho de massa"],
+  authors: [{ name: "FitAI" }],
+  openGraph: {
+    title: "FitAI - Treino e Dieta Personalizados por IA",
+    description: "Seu plano de treino e dieta prontos, personalizados e fáceis.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
