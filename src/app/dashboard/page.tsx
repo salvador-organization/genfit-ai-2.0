@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -21,29 +21,24 @@ import {
   Flame,
   Activity,
 } from 'lucide-react';
-import { getCurrentUser, logout, getQuizAnswers } from '@/lib/auth';
+import { useApp } from '@/contexts/AppContext';
+import { logout } from '@/lib/auth';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
-  const [quizAnswers, setQuizAnswers] = useState<any>(null);
+  const { user, workoutPlan, nutritionPlan } = useApp();
 
   useEffect(() => {
-    const currentUser = getCurrentUser();
-    
-    if (!currentUser) {
+    if (!user) {
       router.push('/login');
       return;
     }
 
-    if (!currentUser.quizCompleted) {
+    if (!user.quizCompleted) {
       router.push('/quiz');
       return;
     }
-
-    setUser(currentUser);
-    setQuizAnswers(getQuizAnswers());
-  }, [router]);
+  }, [user, router]);
 
   const handleLogout = () => {
     logout();
@@ -58,16 +53,10 @@ export default function DashboardPage() {
     );
   }
 
-  // Mapear objetivo para texto amigável
-  const goalMap: Record<string, string> = {
-    weight_loss: 'Emagrecer',
-    muscle_gain: 'Ganhar massa',
-    toning: 'Tonificar',
-    maintenance: 'Manutenção',
-    cardio: 'Condicionamento',
-  };
-
-  const goal = quizAnswers?.goal ? goalMap[quizAnswers.goal] : 'Seu objetivo';
+  // Get today's workout
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const today = days[new Date().getDay()] as keyof typeof workoutPlan.weekly_schedule;
+  const todayWorkout = workoutPlan?.weekly_schedule[today];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
@@ -93,6 +82,9 @@ export default function DashboardPage() {
             </Link>
             <Link href="/dashboard/progresso" className="text-sm font-medium hover:text-orange-600 transition-colors">
               Progresso
+            </Link>
+            <Link href="/dashboard/perfil" className="text-sm font-medium hover:text-orange-600 transition-colors">
+              Perfil
             </Link>
           </nav>
 
@@ -183,57 +175,77 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold">Treino do Dia</h2>
-                  <p className="text-sm text-muted-foreground">Segunda-feira • {goal}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date().toLocaleDateString('pt-BR', { weekday: 'long' })}
+                  </p>
                 </div>
               </div>
               <Badge className="bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
-                Disponível
+                {todayWorkout === 'rest' ? 'Descanso' : 'Disponível'}
               </Badge>
             </div>
 
-            <div className="space-y-4">
-              <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
-                <h3 className="font-semibold mb-2">Treino A - Peito e Tríceps</h3>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    <span>45 min</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Target className="h-4 w-4" />
-                    <span>8 exercícios</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Flame className="h-4 w-4" />
-                    <span>~350 kcal</span>
+            {todayWorkout === 'rest' ? (
+              <div className="text-center py-8">
+                <div className="h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Dia de Descanso</h3>
+                <p className="text-muted-foreground mb-4">
+                  Aproveite para recuperar. O descanso é essencial!
+                </p>
+                <Button variant="outline" asChild>
+                  <Link href="/dashboard/treinos">
+                    Ver semana completa
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            ) : typeof todayWorkout === 'object' ? (
+              <div className="space-y-4">
+                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                  <h3 className="font-semibold mb-2">{todayWorkout.name}</h3>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{todayWorkout.duration} min</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Target className="h-4 w-4" />
+                      <span>{todayWorkout.exercises.length} exercícios</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Flame className="h-4 w-4" />
+                      <span>~{todayWorkout.estimated_calories} kcal</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Exercícios principais:</p>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                    Supino reto - 4x12
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                    Supino inclinado - 3x12
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                    Tríceps testa - 3x15
-                  </li>
-                  <li className="text-orange-600 dark:text-orange-400">+ 5 exercícios</li>
-                </ul>
-              </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Exercícios principais:</p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    {todayWorkout.exercises.slice(0, 3).map((exercise) => (
+                      <li key={exercise.id} className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                        {exercise.name} - {exercise.sets}x{exercise.reps}
+                      </li>
+                    ))}
+                    {todayWorkout.exercises.length > 3 && (
+                      <li className="text-orange-600 dark:text-orange-400">
+                        + {todayWorkout.exercises.length - 3} exercícios
+                      </li>
+                    )}
+                  </ul>
+                </div>
 
-              <Button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700" size="lg">
-                Iniciar treino
-                <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
-            </div>
+                <Button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700" size="lg" asChild>
+                  <Link href="/dashboard/treinos">
+                    Iniciar treino
+                    <ChevronRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
+            ) : null}
           </Card>
 
           {/* Sidebar */}
@@ -248,34 +260,24 @@ export default function DashboardPage() {
               </div>
 
               <div className="space-y-3">
-                <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-sm font-medium">Café da Manhã</p>
-                    <Badge variant="secondary" className="text-xs">07:00</Badge>
+                {nutritionPlan?.meal_schedule.slice(0, 3).map((meal) => (
+                  <div key={meal.id} className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-sm font-medium">{meal.name}</p>
+                      <Badge variant="secondary" className="text-xs">{meal.time}</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {meal.recipe.name} • {meal.calories} kcal
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">Omelete + Aveia • 450 kcal</p>
-                </div>
-
-                <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-sm font-medium">Almoço</p>
-                    <Badge variant="secondary" className="text-xs">12:00</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Frango + Arroz • 650 kcal</p>
-                </div>
-
-                <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-sm font-medium">Jantar</p>
-                    <Badge variant="secondary" className="text-xs">19:00</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Salmão + Legumes • 550 kcal</p>
-                </div>
+                ))}
               </div>
 
-              <Button variant="outline" className="w-full mt-4">
-                Ver plano completo
-                <ChevronRight className="ml-2 h-4 w-4" />
+              <Button variant="outline" className="w-full mt-4" asChild>
+                <Link href="/dashboard/dieta">
+                  Ver plano completo
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </Card>
 
@@ -312,14 +314,16 @@ export default function DashboardPage() {
                 <div className="pt-2 border-t">
                   <p className="text-xs text-muted-foreground mb-2">Meta da semana</p>
                   <p className="text-sm">
-                    Continue assim! Você está no caminho certo para atingir seu objetivo de <strong>{goal.toLowerCase()}</strong>.
+                    Continue assim! Você está no caminho certo para atingir seus objetivos.
                   </p>
                 </div>
               </div>
 
-              <Button variant="outline" className="w-full mt-4">
-                Ver relatório completo
-                <ChevronRight className="ml-2 h-4 w-4" />
+              <Button variant="outline" className="w-full mt-4" asChild>
+                <Link href="/dashboard/progresso">
+                  Ver relatório completo
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </Card>
           </div>
@@ -329,44 +333,52 @@ export default function DashboardPage() {
         <div className="mt-8">
           <h2 className="text-xl font-bold mb-4">Ações Rápidas</h2>
           <div className="grid gap-4 md:grid-cols-4">
-            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-center gap-3">
-                <Calendar className="h-8 w-8 text-orange-600 dark:text-orange-400" />
-                <div>
-                  <p className="font-semibold">Calendário</p>
-                  <p className="text-xs text-muted-foreground">Ver semana</p>
+            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <Link href="/dashboard/treinos">
+                <div className="flex items-center gap-3">
+                  <Calendar className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                  <div>
+                    <p className="font-semibold">Calendário</p>
+                    <p className="text-xs text-muted-foreground">Ver semana</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </Card>
 
-            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-center gap-3">
-                <Target className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                <div>
-                  <p className="font-semibold">Metas</p>
-                  <p className="text-xs text-muted-foreground">Definir objetivos</p>
+            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <Link href="/dashboard/progresso">
+                <div className="flex items-center gap-3">
+                  <Target className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                  <div>
+                    <p className="font-semibold">Metas</p>
+                    <p className="text-xs text-muted-foreground">Ver objetivos</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </Card>
 
-            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-center gap-3">
-                <Activity className="h-8 w-8 text-green-600 dark:text-green-400" />
-                <div>
-                  <p className="font-semibold">Medidas</p>
-                  <p className="text-xs text-muted-foreground">Registrar progresso</p>
+            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <Link href="/dashboard/progresso">
+                <div className="flex items-center gap-3">
+                  <Activity className="h-8 w-8 text-green-600 dark:text-green-400" />
+                  <div>
+                    <p className="font-semibold">Medidas</p>
+                    <p className="text-xs text-muted-foreground">Registrar progresso</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </Card>
 
-            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-center gap-3">
-                <Award className="h-8 w-8 text-purple-600 dark:text-purple-400" />
-                <div>
-                  <p className="font-semibold">Conquistas</p>
-                  <p className="text-xs text-muted-foreground">Ver badges</p>
+            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <Link href="/dashboard/perfil">
+                <div className="flex items-center gap-3">
+                  <Award className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                  <div>
+                    <p className="font-semibold">Conquistas</p>
+                    <p className="text-xs text-muted-foreground">Ver badges</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </Card>
           </div>
         </div>
