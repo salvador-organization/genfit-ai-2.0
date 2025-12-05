@@ -76,7 +76,7 @@ export default function LandingPage() {
               <Link href="/login">Entrar</Link>
             </Button>
             <Button size="sm" className="bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700" asChild>
-              <Link href="/quiz">Começar grátis</Link>
+              <Link href="/signup">Começar grátis</Link>
             </Button>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function LandingPage() {
                 className="bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 text-lg h-14 px-8"
                 asChild
               >
-                <Link href="/quiz">
+                <Link href="/signup">
                   Quero meu plano personalizado
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -246,7 +246,7 @@ export default function LandingPage() {
               className="bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700"
               asChild
             >
-              <Link href="/quiz">
+              <Link href="/signup">
                 Começar agora
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
@@ -352,7 +352,7 @@ export default function LandingPage() {
                     size="lg"
                     asChild
                   >
-                    <Link href="/quiz">Começar agora</Link>
+                    <Link href="/signup">Começar agora</Link>
                   </Button>
 
                   <p className="text-xs text-center text-muted-foreground">
@@ -419,7 +419,7 @@ export default function LandingPage() {
                 className="bg-white text-orange-600 hover:bg-slate-50 text-lg h-14 px-8"
                 asChild
               >
-                <Link href="/quiz">
+                <Link href="/signup">
                   Criar meu plano grátis
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
