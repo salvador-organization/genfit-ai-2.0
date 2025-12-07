@@ -63,37 +63,37 @@ export default function ConfiguracoesPage() {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm dark:bg-slate-950/80">
+      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm dark:bg-gray-950/80">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-pink-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-gray-900 to-gray-700">
               <SettingsIcon className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold">FitAI</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/dashboard" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard" className="text-sm font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Início
             </Link>
-            <Link href="/dashboard/treinos" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/treinos" className="text-sm font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Treinos
             </Link>
-            <Link href="/dashboard/dieta" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/dieta" className="text-sm font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Dieta
             </Link>
-            <Link href="/dashboard/progresso" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/progresso" className="text-sm font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Progresso
             </Link>
-            <Link href="/dashboard/perfil" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/perfil" className="text-sm font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Perfil
             </Link>
           </nav>
@@ -118,11 +118,11 @@ export default function ConfiguracoesPage() {
           {/* Appearance */}
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              {theme === 'light' ? <Sun className="h-5 w-5 text-orange-600" /> : <Moon className="h-5 w-5 text-purple-600" />}
+              {theme === 'light' ? <Sun className="h-5 w-5 text-gray-700 dark:text-gray-300" /> : <Moon className="h-5 w-5 text-gray-700 dark:text-gray-300" />}
               Aparência
             </h2>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                 <div>
                   <p className="font-semibold">Tema</p>
                   <p className="text-sm text-muted-foreground">
@@ -139,11 +139,11 @@ export default function ConfiguracoesPage() {
           {/* Language */}
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <Globe className="h-5 w-5 text-blue-600" />
+              <Globe className="h-5 w-5 text-gray-700 dark:text-gray-300" />
               Idioma
             </h2>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                 <div>
                   <p className="font-semibold">Idioma do aplicativo</p>
                   <p className="text-sm text-muted-foreground">Português (Brasil)</p>
@@ -156,25 +156,25 @@ export default function ConfiguracoesPage() {
           {/* Notifications */}
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <Bell className="h-5 w-5 text-orange-600" />
+              <Bell className="h-5 w-5 text-gray-700 dark:text-gray-300" />
               Notificações
             </h2>
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                 <div>
                   <p className="font-semibold">Push notifications</p>
                   <p className="text-sm text-muted-foreground">Receba notificações no dispositivo</p>
                 </div>
-                <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Ativo</Badge>
+                <Badge className="bg-gray-200 text-gray-900 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100">Ativo</Badge>
               </div>
-              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                 <div>
                   <p className="font-semibold">Email notifications</p>
                   <p className="text-sm text-muted-foreground">Receba atualizações por email</p>
                 </div>
-                <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Ativo</Badge>
+                <Badge className="bg-gray-200 text-gray-900 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100">Ativo</Badge>
               </div>
-              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                 <div>
                   <p className="font-semibold">Frequência</p>
                   <p className="text-sm text-muted-foreground">Notificações diárias</p>
@@ -187,7 +187,7 @@ export default function ConfiguracoesPage() {
           {/* Privacy & Security */}
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <Shield className="h-5 w-5 text-green-600" />
+              <Shield className="h-5 w-5 text-gray-700 dark:text-gray-300" />
               Privacidade e Segurança
             </h2>
             <div className="space-y-3">
@@ -209,15 +209,15 @@ export default function ConfiguracoesPage() {
           {/* Data Management */}
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <Download className="h-5 w-5 text-purple-600" />
+              <Download className="h-5 w-5 text-gray-700 dark:text-gray-300" />
               Gerenciamento de Dados
             </h2>
             <div className="space-y-4">
-              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
+              <div className="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                <p className="text-sm text-gray-900 dark:text-gray-100 mb-2">
                   <strong>LGPD:</strong> Você tem direito a acessar, corrigir e excluir seus dados pessoais.
                 </p>
-                <p className="text-xs text-blue-700 dark:text-blue-300">
+                <p className="text-xs text-gray-700 dark:text-gray-300">
                   Seus dados são criptografados e armazenados com segurança. Nunca compartilhamos suas informações com terceiros sem seu consentimento.
                 </p>
               </div>
@@ -229,17 +229,17 @@ export default function ConfiguracoesPage() {
           </Card>
 
           {/* Danger Zone */}
-          <Card className="p-6 border-red-200 dark:border-red-800">
-            <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-red-600 dark:text-red-400">
+          <Card className="p-6 border-gray-400 dark:border-gray-600">
+            <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Trash2 className="h-5 w-5" />
               Zona de Perigo
             </h2>
             <div className="space-y-4">
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <p className="text-sm text-red-800 dark:text-red-200 mb-2">
+              <div className="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                <p className="text-sm text-gray-900 dark:text-gray-100 mb-2">
                   <strong>Atenção:</strong> Esta ação é irreversível.
                 </p>
-                <p className="text-xs text-red-700 dark:text-red-300">
+                <p className="text-xs text-gray-700 dark:text-gray-300">
                   Ao excluir sua conta, todos os seus dados, incluindo treinos, dieta, progresso e histórico serão permanentemente removidos.
                 </p>
               </div>
@@ -251,7 +251,7 @@ export default function ConfiguracoesPage() {
           </Card>
 
           {/* App Info */}
-          <Card className="p-6 bg-slate-50 dark:bg-slate-900/50">
+          <Card className="p-6 bg-gray-50 dark:bg-gray-900/50">
             <h2 className="text-lg font-bold mb-4">Sobre o FitAI</h2>
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>Versão: 1.0.0</p>
