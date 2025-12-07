@@ -1,19 +1,22 @@
-// 📋 Perguntas do Quiz FitAI
+// 📋 Perguntas do Quiz FitAI - 16 Perguntas Completas
 
 export interface QuizQuestion {
   id: string;
   title: string;
   description?: string;
-  type: 'single' | 'multiple';
-  options: {
+  type: 'single' | 'multiple' | 'input' | 'number';
+  options?: {
     value: string;
     label: string;
     description?: string;
     icon?: string;
   }[];
+  placeholder?: string;
+  unit?: string;
 }
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
+  // 1. Objetivo Principal
   {
     id: 'goal',
     title: 'Qual é o seu objetivo principal?',
@@ -52,6 +55,58 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       },
     ],
   },
+
+  // 2. Dados Físicos - Peso
+  {
+    id: 'weight',
+    title: 'Qual é o seu peso atual?',
+    description: 'Informe seu peso em quilogramas',
+    type: 'number',
+    placeholder: 'Ex: 75',
+    unit: 'kg',
+  },
+
+  // 3. Dados Físicos - Altura
+  {
+    id: 'height',
+    title: 'Qual é a sua altura?',
+    description: 'Informe sua altura em centímetros',
+    type: 'number',
+    placeholder: 'Ex: 175',
+    unit: 'cm',
+  },
+
+  // 4. Dados Físicos - Idade
+  {
+    id: 'age',
+    title: 'Qual é a sua idade?',
+    description: 'Vamos ajustar o plano para sua faixa etária',
+    type: 'number',
+    placeholder: 'Ex: 28',
+    unit: 'anos',
+  },
+
+  // 5. Dados Físicos - Sexo
+  {
+    id: 'gender',
+    title: 'Qual é o seu sexo biológico?',
+    description: 'Isso ajuda a calcular suas necessidades calóricas',
+    type: 'single',
+    options: [
+      {
+        value: 'male',
+        label: 'Masculino',
+        icon: '👨',
+      },
+      {
+        value: 'female',
+        label: 'Feminino',
+        icon: '👩',
+      },
+    ],
+  },
+
+  // 6. Frequência de Treino
   {
     id: 'frequency',
     title: 'Quantas vezes por semana você pode treinar?',
@@ -84,6 +139,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       },
     ],
   },
+
+  // 7. Local de Treino
   {
     id: 'location',
     title: 'Onde você vai treinar?',
@@ -116,6 +173,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       },
     ],
   },
+
+  // 8. Duração do Treino
   {
     id: 'duration',
     title: 'Quanto tempo você tem por treino?',
@@ -148,6 +207,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       },
     ],
   },
+
+  // 9. Nível de Experiência
   {
     id: 'experience',
     title: 'Qual é o seu nível de experiência?',
@@ -174,10 +235,46 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       },
     ],
   },
+
+  // 10. Nível de Atividade Diária
+  {
+    id: 'activity_level',
+    title: 'Qual é o seu nível de atividade no dia a dia?',
+    description: 'Fora dos treinos, como é sua rotina?',
+    type: 'single',
+    options: [
+      {
+        value: 'sedentary',
+        label: 'Sedentário',
+        description: 'Trabalho sentado, pouca movimentação',
+        icon: '🪑',
+      },
+      {
+        value: 'light',
+        label: 'Levemente ativo',
+        description: 'Caminho um pouco durante o dia',
+        icon: '🚶',
+      },
+      {
+        value: 'moderate',
+        label: 'Moderadamente ativo',
+        description: 'Trabalho em pé, movimento constante',
+        icon: '🏃',
+      },
+      {
+        value: 'very_active',
+        label: 'Muito ativo',
+        description: 'Trabalho físico intenso',
+        icon: '💪',
+      },
+    ],
+  },
+
+  // 11. Restrições Alimentares
   {
     id: 'restrictions',
     title: 'Você tem alguma restrição alimentar?',
-    description: 'Selecione todas que se aplicam (opcional)',
+    description: 'Selecione todas que se aplicam',
     type: 'multiple',
     options: [
       {
@@ -207,10 +304,12 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       },
     ],
   },
+
+  // 12. Preferências de Treino
   {
     id: 'preferences',
     title: 'Quais tipos de treino você prefere?',
-    description: 'Selecione suas preferências (opcional)',
+    description: 'Selecione suas preferências',
     type: 'multiple',
     options: [
       {
@@ -239,5 +338,117 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
         icon: '⭐',
       },
     ],
+  },
+
+  // 13. Horário Preferido
+  {
+    id: 'preferred_time',
+    title: 'Qual horário você prefere treinar?',
+    description: 'Vamos otimizar seu plano para o melhor momento',
+    type: 'single',
+    options: [
+      {
+        value: 'morning',
+        label: 'Manhã (6h - 10h)',
+        description: 'Começar o dia com energia',
+        icon: '🌅',
+      },
+      {
+        value: 'afternoon',
+        label: 'Tarde (12h - 17h)',
+        description: 'Meio do dia',
+        icon: '☀️',
+      },
+      {
+        value: 'evening',
+        label: 'Noite (18h - 22h)',
+        description: 'Após o trabalho',
+        icon: '🌙',
+      },
+      {
+        value: 'flexible',
+        label: 'Flexível',
+        description: 'Varia conforme o dia',
+        icon: '🔄',
+      },
+    ],
+  },
+
+  // 14. Lesões ou Limitações
+  {
+    id: 'injuries',
+    title: 'Você tem alguma lesão ou limitação física?',
+    description: 'Vamos adaptar os exercícios para sua segurança',
+    type: 'multiple',
+    options: [
+      {
+        value: 'knee',
+        label: 'Joelho',
+        icon: '🦵',
+      },
+      {
+        value: 'back',
+        label: 'Coluna/Costas',
+        icon: '🔙',
+      },
+      {
+        value: 'shoulder',
+        label: 'Ombro',
+        icon: '💪',
+      },
+      {
+        value: 'wrist',
+        label: 'Pulso',
+        icon: '✋',
+      },
+      {
+        value: 'none',
+        label: 'Nenhuma limitação',
+        icon: '✅',
+      },
+    ],
+  },
+
+  // 15. Motivação Principal
+  {
+    id: 'motivation',
+    title: 'O que mais te motiva a treinar?',
+    description: 'Vamos personalizar sua experiência',
+    type: 'single',
+    options: [
+      {
+        value: 'health',
+        label: 'Saúde e bem-estar',
+        description: 'Viver melhor e mais saudável',
+        icon: '❤️',
+      },
+      {
+        value: 'aesthetics',
+        label: 'Estética corporal',
+        description: 'Melhorar aparência física',
+        icon: '✨',
+      },
+      {
+        value: 'performance',
+        label: 'Performance esportiva',
+        description: 'Melhorar desempenho',
+        icon: '🏆',
+      },
+      {
+        value: 'energy',
+        label: 'Mais energia no dia a dia',
+        description: 'Disposição e vitalidade',
+        icon: '⚡',
+      },
+    ],
+  },
+
+  // 16. Email para Contato
+  {
+    id: 'email',
+    title: 'Qual é o seu melhor email?',
+    description: 'Vamos enviar seu plano personalizado e acompanhar sua evolução',
+    type: 'input',
+    placeholder: 'seu@email.com',
   },
 ];

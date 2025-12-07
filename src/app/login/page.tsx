@@ -45,27 +45,27 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-pink-600">
-              <Sparkles className="h-7 w-7 text-white" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-black dark:bg-white">
+              <Sparkles className="h-7 w-7 text-white dark:text-black" />
             </div>
             <span className="text-2xl font-bold">FitAI</span>
           </Link>
           <h1 className="text-3xl font-bold tracking-tight">Entrar</h1>
-          <p className="text-muted-foreground">
+          <p className="text-gray-600 dark:text-gray-400">
             Bem-vindo de volta! Continue sua jornada
           </p>
         </div>
 
         {/* Form */}
-        <Card className="p-8">
+        <Card className="p-8 border-gray-200 dark:border-gray-800">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="flex items-center gap-2 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-400">
+              <div className="flex items-center gap-2 p-4 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100">
                 <AlertCircle className="h-5 w-5 flex-shrink-0" />
                 <p className="text-sm">{error}</p>
               </div>
@@ -81,6 +81,7 @@ export default function LoginPage() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
                 disabled={loading}
+                className="border-gray-300 dark:border-gray-700"
               />
             </div>
 
@@ -89,7 +90,7 @@ export default function LoginPage() {
                 <Label htmlFor="password">Senha</Label>
                 <Link
                   href="/recuperar-senha"
-                  className="text-xs text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+                  className="text-xs text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white"
                 >
                   Esqueceu a senha?
                 </Link>
@@ -102,12 +103,13 @@ export default function LoginPage() {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
                 disabled={loading}
+                className="border-gray-300 dark:border-gray-700"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700"
+              className="w-full bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
               size="lg"
               disabled={loading}
             >
@@ -119,11 +121,11 @@ export default function LoginPage() {
 
         {/* Signup Link */}
         <div className="text-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Não tem uma conta?{' '}
             <Link
               href="/signup"
-              className="font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+              className="font-semibold text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
             >
               Criar conta grátis
             </Link>
@@ -134,7 +136,7 @@ export default function LoginPage() {
         <div className="text-center">
           <Link
             href="/"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
           >
             ← Voltar para o início
           </Link>

@@ -42,27 +42,27 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-pink-600">
-              <Sparkles className="h-7 w-7 text-white" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-black dark:bg-white">
+              <Sparkles className="h-7 w-7 text-white dark:text-black" />
             </div>
             <span className="text-2xl font-bold">FitAI</span>
           </Link>
           <h1 className="text-3xl font-bold tracking-tight">Criar conta</h1>
-          <p className="text-muted-foreground">
+          <p className="text-gray-600 dark:text-gray-400">
             Comece sua jornada fitness hoje mesmo
           </p>
         </div>
 
         {/* Form */}
-        <Card className="p-8">
+        <Card className="p-8 border-gray-200 dark:border-gray-800">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="flex items-center gap-2 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg text-red-700 dark:text-red-400">
+              <div className="flex items-center gap-2 p-4 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100">
                 <AlertCircle className="h-5 w-5 flex-shrink-0" />
                 <p className="text-sm">{error}</p>
               </div>
@@ -78,6 +78,7 @@ export default function SignupPage() {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
                 disabled={loading}
+                className="border-gray-300 dark:border-gray-700"
               />
             </div>
 
@@ -91,6 +92,7 @@ export default function SignupPage() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
                 disabled={loading}
+                className="border-gray-300 dark:border-gray-700"
               />
             </div>
 
@@ -105,15 +107,16 @@ export default function SignupPage() {
                 required
                 minLength={6}
                 disabled={loading}
+                className="border-gray-300 dark:border-gray-700"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-gray-600 dark:text-gray-400">
                 Mínimo 6 caracteres
               </p>
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700"
+              className="w-full bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
               size="lg"
               disabled={loading}
             >
@@ -121,13 +124,13 @@ export default function SignupPage() {
               {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
             </Button>
 
-            <p className="text-xs text-center text-muted-foreground">
+            <p className="text-xs text-center text-gray-600 dark:text-gray-400">
               Ao criar uma conta, você concorda com nossos{' '}
-              <Link href="/termos" className="underline hover:text-foreground">
+              <Link href="/termos" className="underline hover:text-black dark:hover:text-white">
                 Termos de Uso
               </Link>{' '}
               e{' '}
-              <Link href="/privacidade" className="underline hover:text-foreground">
+              <Link href="/privacidade" className="underline hover:text-black dark:hover:text-white">
                 Política de Privacidade
               </Link>
             </p>
@@ -136,11 +139,11 @@ export default function SignupPage() {
 
         {/* Login Link */}
         <div className="text-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Já tem uma conta?{' '}
             <Link
               href="/login"
-              className="font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+              className="font-semibold text-black hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
             >
               Entrar
             </Link>
@@ -151,7 +154,7 @@ export default function SignupPage() {
         <div className="text-center">
           <Link
             href="/"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
           >
             ← Voltar para o início
           </Link>
