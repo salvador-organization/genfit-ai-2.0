@@ -48,7 +48,7 @@ export default function DashboardPage() {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100"></div>
       </div>
     );
   }
@@ -59,31 +59,31 @@ export default function DashboardPage() {
   const todayWorkout = workoutPlan?.weekly_schedule[today];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-white dark:bg-black">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm dark:bg-slate-950/80">
+      <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white/80 backdrop-blur-sm dark:bg-black/80">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-pink-600">
-              <Sparkles className="h-6 w-6 text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-black dark:bg-white">
+              <Sparkles className="h-6 w-6 text-white dark:text-black" />
             </div>
-            <span className="text-xl font-bold">FitAI</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">FitAI</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/dashboard" className="text-sm font-medium text-orange-600">
+            <Link href="/dashboard" className="text-sm font-medium text-gray-900 dark:text-gray-100">
               Início
             </Link>
-            <Link href="/dashboard/treinos" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/treinos" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Treinos
             </Link>
-            <Link href="/dashboard/dieta" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/dieta" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Dieta
             </Link>
-            <Link href="/dashboard/progresso" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/progresso" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Progresso
             </Link>
-            <Link href="/dashboard/perfil" className="text-sm font-medium hover:text-orange-600 transition-colors">
+            <Link href="/dashboard/perfil" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Perfil
             </Link>
           </nav>
@@ -105,60 +105,60 @@ export default function DashboardPage() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Welcome Section */}
         <div className="mb-8 space-y-2">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
             Olá, {user.name.split(' ')[0]}! 👋
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Pronto para treinar hoje? Seu plano personalizado está esperando.
           </p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid gap-6 md:grid-cols-4 mb-8">
-          <Card className="p-6">
+          <Card className="p-6 border-gray-200 dark:border-gray-800">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
-                <Flame className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+              <div className="h-12 w-12 rounded-lg bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                <Flame className="h-6 w-6 text-gray-900 dark:text-gray-100" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Sequência</p>
-                <p className="text-2xl font-bold">7 dias</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Sequência</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">7 dias</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 border-gray-200 dark:border-gray-800">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                <Dumbbell className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="h-12 w-12 rounded-lg bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                <Dumbbell className="h-6 w-6 text-gray-900 dark:text-gray-100" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Treinos</p>
-                <p className="text-2xl font-bold">12</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Treinos</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">12</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 border-gray-200 dark:border-gray-800">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                <Activity className="h-6 w-6 text-green-600 dark:text-green-400" />
+              <div className="h-12 w-12 rounded-lg bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                <Activity className="h-6 w-6 text-gray-900 dark:text-gray-100" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Calorias</p>
-                <p className="text-2xl font-bold">2.4k</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Calorias</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">2.4k</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 border-gray-200 dark:border-gray-800">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                <Award className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <div className="h-12 w-12 rounded-lg bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                <Award className="h-6 w-6 text-gray-900 dark:text-gray-100" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Conquistas</p>
-                <p className="text-2xl font-bold">5</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Conquistas</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">5</p>
               </div>
             </div>
           </Card>
@@ -167,34 +167,34 @@ export default function DashboardPage() {
         {/* Main Grid */}
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Treino do Dia */}
-          <Card className="lg:col-span-2 p-6">
+          <Card className="lg:col-span-2 p-6 border-gray-200 dark:border-gray-800">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-orange-500 to-pink-600 flex items-center justify-center">
-                  <Dumbbell className="h-6 w-6 text-white" />
+                <div className="h-12 w-12 rounded-lg bg-black dark:bg-white flex items-center justify-center">
+                  <Dumbbell className="h-6 w-6 text-white dark:text-black" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold">Treino do Dia</h2>
-                  <p className="text-sm text-muted-foreground">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Treino do Dia</h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {new Date().toLocaleDateString('pt-BR', { weekday: 'long' })}
                   </p>
                 </div>
               </div>
-              <Badge className="bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
+              <Badge className="bg-gray-100 text-gray-900 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-100">
                 {todayWorkout === 'rest' ? 'Descanso' : 'Disponível'}
               </Badge>
             </div>
 
             {todayWorkout === 'rest' ? (
               <div className="text-center py-8">
-                <div className="h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
-                  <Calendar className="h-8 w-8 text-green-600 dark:text-green-400" />
+                <div className="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-900 flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-gray-900 dark:text-gray-100" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">Dia de Descanso</h3>
-                <p className="text-muted-foreground mb-4">
+                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">Dia de Descanso</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Aproveite para recuperar. O descanso é essencial!
                 </p>
-                <Button variant="outline" asChild>
+                <Button variant="outline" asChild className="border-gray-300 dark:border-gray-700">
                   <Link href="/dashboard/treinos">
                     Ver semana completa
                     <ChevronRight className="ml-2 h-4 w-4" />
@@ -203,9 +203,9 @@ export default function DashboardPage() {
               </div>
             ) : typeof todayWorkout === 'object' ? (
               <div className="space-y-4">
-                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
-                  <h3 className="font-semibold mb-2">{todayWorkout.name}</h3>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                  <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">{todayWorkout.name}</h3>
+                  <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
                       <span>{todayWorkout.duration} min</span>
@@ -222,23 +222,23 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Exercícios principais:</p>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Exercícios principais:</p>
+                  <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                     {todayWorkout.exercises.slice(0, 3).map((exercise) => (
                       <li key={exercise.id} className="flex items-center gap-2">
-                        <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                        <div className="h-2 w-2 rounded-full bg-gray-900 dark:bg-gray-100"></div>
                         {exercise.name} - {exercise.sets}x{exercise.reps}
                       </li>
                     ))}
                     {todayWorkout.exercises.length > 3 && (
-                      <li className="text-orange-600 dark:text-orange-400">
+                      <li className="text-gray-900 dark:text-gray-100">
                         + {todayWorkout.exercises.length - 3} exercícios
                       </li>
                     )}
                   </ul>
                 </div>
 
-                <Button className="w-full bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700" size="lg" asChild>
+                <Button className="w-full bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-black" size="lg" asChild>
                   <Link href="/dashboard/treinos">
                     Iniciar treino
                     <ChevronRight className="ml-2 h-5 w-5" />
@@ -251,29 +251,29 @@ export default function DashboardPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Refeições do Dia */}
-            <Card className="p-6">
+            <Card className="p-6 border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-10 w-10 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                  <UtensilsCrossed className="h-5 w-5 text-green-600 dark:text-green-400" />
+                <div className="h-10 w-10 rounded-lg bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                  <UtensilsCrossed className="h-5 w-5 text-gray-900 dark:text-gray-100" />
                 </div>
-                <h2 className="text-lg font-bold">Refeições do Dia</h2>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Refeições do Dia</h2>
               </div>
 
               <div className="space-y-3">
                 {nutritionPlan?.meal_schedule.slice(0, 3).map((meal) => (
-                  <div key={meal.id} className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                  <div key={meal.id} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-medium">{meal.name}</p>
-                      <Badge variant="secondary" className="text-xs">{meal.time}</Badge>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{meal.name}</p>
+                      <Badge variant="secondary" className="text-xs bg-gray-200 dark:bg-gray-800">{meal.time}</Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
                       {meal.recipe.name} • {meal.calories} kcal
                     </p>
                   </div>
                 ))}
               </div>
 
-              <Button variant="outline" className="w-full mt-4" asChild>
+              <Button variant="outline" className="w-full mt-4 border-gray-300 dark:border-gray-700" asChild>
                 <Link href="/dashboard/dieta">
                   Ver plano completo
                   <ChevronRight className="ml-2 h-4 w-4" />
@@ -282,44 +282,44 @@ export default function DashboardPage() {
             </Card>
 
             {/* Progresso */}
-            <Card className="p-6">
+            <Card className="p-6 border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-10 w-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                <div className="h-10 w-10 rounded-lg bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                  <TrendingUp className="h-5 w-5 text-gray-900 dark:text-gray-100" />
                 </div>
-                <h2 className="text-lg font-bold">Progresso Semanal</h2>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Progresso Semanal</h2>
               </div>
 
               <div className="space-y-4">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm text-muted-foreground">Treinos</p>
-                    <p className="text-sm font-semibold">3/4</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Treinos</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">3/4</p>
                   </div>
-                  <div className="h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-orange-500 to-pink-600" style={{ width: '75%' }}></div>
+                  <div className="h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-black dark:bg-white" style={{ width: '75%' }}></div>
                   </div>
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm text-muted-foreground">Dieta</p>
-                    <p className="text-sm font-semibold">5/7</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Dieta</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">5/7</p>
                   </div>
-                  <div className="h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-green-500 to-emerald-600" style={{ width: '71%' }}></div>
+                  <div className="h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-black dark:bg-white" style={{ width: '71%' }}></div>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t">
-                  <p className="text-xs text-muted-foreground mb-2">Meta da semana</p>
-                  <p className="text-sm">
+                <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Meta da semana</p>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">
                     Continue assim! Você está no caminho certo para atingir seus objetivos.
                   </p>
                 </div>
               </div>
 
-              <Button variant="outline" className="w-full mt-4" asChild>
+              <Button variant="outline" className="w-full mt-4 border-gray-300 dark:border-gray-700" asChild>
                 <Link href="/dashboard/progresso">
                   Ver relatório completo
                   <ChevronRight className="ml-2 h-4 w-4" />
@@ -331,51 +331,51 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4">Ações Rápidas</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Ações Rápidas</h2>
           <div className="grid gap-4 md:grid-cols-4">
-            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer" asChild>
+            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer border-gray-200 dark:border-gray-800" asChild>
               <Link href="/dashboard/treinos">
                 <div className="flex items-center gap-3">
-                  <Calendar className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                  <Calendar className="h-8 w-8 text-gray-900 dark:text-gray-100" />
                   <div>
-                    <p className="font-semibold">Calendário</p>
-                    <p className="text-xs text-muted-foreground">Ver semana</p>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100">Calendário</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Ver semana</p>
                   </div>
                 </div>
               </Link>
             </Card>
 
-            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer" asChild>
+            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer border-gray-200 dark:border-gray-800" asChild>
               <Link href="/dashboard/progresso">
                 <div className="flex items-center gap-3">
-                  <Target className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                  <Target className="h-8 w-8 text-gray-900 dark:text-gray-100" />
                   <div>
-                    <p className="font-semibold">Metas</p>
-                    <p className="text-xs text-muted-foreground">Ver objetivos</p>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100">Metas</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Ver objetivos</p>
                   </div>
                 </div>
               </Link>
             </Card>
 
-            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer" asChild>
+            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer border-gray-200 dark:border-gray-800" asChild>
               <Link href="/dashboard/progresso">
                 <div className="flex items-center gap-3">
-                  <Activity className="h-8 w-8 text-green-600 dark:text-green-400" />
+                  <Activity className="h-8 w-8 text-gray-900 dark:text-gray-100" />
                   <div>
-                    <p className="font-semibold">Medidas</p>
-                    <p className="text-xs text-muted-foreground">Registrar progresso</p>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100">Medidas</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Registrar progresso</p>
                   </div>
                 </div>
               </Link>
             </Card>
 
-            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer" asChild>
+            <Card className="p-4 hover:shadow-lg transition-shadow cursor-pointer border-gray-200 dark:border-gray-800" asChild>
               <Link href="/dashboard/perfil">
                 <div className="flex items-center gap-3">
-                  <Award className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                  <Award className="h-8 w-8 text-gray-900 dark:text-gray-100" />
                   <div>
-                    <p className="font-semibold">Conquistas</p>
-                    <p className="text-xs text-muted-foreground">Ver badges</p>
+                    <p className="font-semibold text-gray-900 dark:text-gray-100">Conquistas</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Ver badges</p>
                   </div>
                 </div>
               </Link>
