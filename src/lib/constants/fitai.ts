@@ -1,6 +1,21 @@
 // 🏋️ FitAI - Constants and Configuration
 
-import type { PlanDetails } from '@/lib/types/fitai';
+// ============================================
+// TYPES
+// ============================================
+
+export interface PlanDetails {
+  type: 'monthly' | 'quarterly' | 'annual';
+  name: string;
+  price_monthly: number;
+  price_total: number;
+  billing_period: string;
+  savings_percentage?: number;
+  savings_amount?: number;
+  features: string[];
+  badge?: string;
+  popular?: boolean;
+}
 
 // ============================================
 // PRODUCT INFO
