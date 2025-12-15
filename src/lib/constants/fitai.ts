@@ -531,23 +531,7 @@ export const MACRO_RATIOS = {
 };
 
 // ============================================
-// EXPORT ALL
+// EXPORTS
 // ============================================
-
-export {
-  PRODUCT_NAME,
-  PRODUCT_TAGLINE,
-  PRODUCT_DESCRIPTION,
-  PLANS,
-  QUIZ_OPTIONS,
-  BENEFITS,
-  SOCIAL_PROOF,
-  HOW_IT_WORKS,
-  TESTIMONIALS,
-  FAQ,
-  STREAK_BADGES,
-  FIRST_WEEK_MISSIONS,
-  ACTIVITY_FACTORS,
-  CALORIE_ADJUSTMENTS,
-  MACRO_RATIOS,
-};
+// Todas as constantes já foram exportadas individualmente acima com 'export const'
+// Não é necessário re-exportá-las aqui para evitar duplicate export no build
