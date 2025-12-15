@@ -2,10 +2,22 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Check, X, RefreshCw, Clock, Dumbbell } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { 
+  Dumbbell, 
+  Clock, 
+  Target, 
+  CheckCircle2, 
+  XCircle, 
+  ArrowLeft,
+  RefreshCw,
+  Play,
+  Pause
+} from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
 interface Exercise {
@@ -24,10 +36,8 @@ interface Workout {
   name: string
   day: string
   exercises: Exercise[]
-  completed: boolean
   duration: number
-  started_at?: string
-  completed_at?: string
+  completed: boolean
 }
 
 export default function WorkoutDetailPage() {
@@ -35,9 +45,8 @@ export default function WorkoutDetailPage() {
   const router = useRouter()
   const [workout, setWorkout] = useState<Workout | null>(null)
   const [loading, setLoading] = useState(true)
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
+  const [isActive, setIsActive] = useState(false)
   const [timer, setTimer] = useState(0)
-  const [isResting, setIsResting] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -46,24 +55,20 @@ export default function WorkoutDetailPage() {
 
   useEffect(() => {
     let interval: NodeJS.Timeout
-    if (workout && !workout.completed) {
+    if (isActive) {
       interval = setInterval(() => {
-        setTimer(prev => prev + 1)
+        setTimer((prev) => prev + 1)
       }, 1000)
     }
     return () => clearInterval(interval)
-  }, [workout])
+  }, [isActive])
 
   async function loadWorkout() {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-
       const { data, error } = await supabase
         .from('workouts')
         .select('*')
         .eq('id', params.id)
-        .eq('user_id', user.id)
         .single()
 
       if (error) throw error
@@ -75,60 +80,75 @@ export default function WorkoutDetailPage() {
     }
   }
 
-  async function toggleExerciseComplete(exerciseId: string) {
+  const toggleExercise = (exerciseId: string) => {
     if (!workout) return
-
-    const updatedExercises = workout.exercises.map(ex =>
-      ex.id === exerciseId ? { ...ex, completed: !ex.completed } : ex
-    )
-
-    setWorkout({ ...workout, exercises: updatedExercises })
-
-    try {
-      await supabase
-        .from('workout_exercises')
-        .update({ completed: !workout.exercises.find(e => e.id === exerciseId)?.completed })
-        .eq('id', exerciseId)
-    } catch (error) {
-      console.error('Erro ao atualizar exercício:', error)
-    }
+    
+    setWorkout({
+      ...workout,
+      exercises: workout.exercises.map((ex) =>
+        ex.id === exerciseId ? { ...ex, completed: !ex.completed } : ex
+      ),
+    })
   }
 
-  async function completeWorkout() {
+  const updateExerciseWeight = (exerciseId: string, weight: number) => {
     if (!workout) return
-
-    try {
-      const { error } = await supabase
-        .from('workouts')
-        .update({
-          completed: true,
-          completed_at: new Date().toISOString(),
-          duration: Math.floor(timer / 60)
-        })
-        .eq('id', workout.id)
-
-      if (error) throw error
-
-      router.push('/dashboard/training')
-    } catch (error) {
-      console.error('Erro ao completar treino:', error)
-    }
+    
+    setWorkout({
+      ...workout,
+      exercises: workout.exercises.map((ex) =>
+        ex.id === exerciseId ? { ...ex, weight } : ex
+      ),
+    })
   }
 
-  async function substituteExercise(exerciseId: string) {
+  const substituteExercise = async (exerciseId: string) => {
     try {
       const response = await fetch('/api/training/substitution', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ exerciseId, workoutId: workout?.id })
+        body: JSON.stringify({
+          workout_id: workout?.id,
+          exercise_id: exerciseId,
+        }),
       })
 
-      const data = await response.json()
-      if (data.success) {
-        loadWorkout()
-      }
+      if (!response.ok) throw new Error('Erro ao substituir exercício')
+      
+      const { substitution } = await response.json()
+      
+      if (!workout) return
+      
+      setWorkout({
+        ...workout,
+        exercises: workout.exercises.map((ex) =>
+          ex.id === exerciseId ? { ...ex, ...substitution } : ex
+        ),
+      })
     } catch (error) {
       console.error('Erro ao substituir exercício:', error)
+    }
+  }
+
+  const completeWorkout = async () => {
+    if (!workout) return
+    
+    try {
+      const response = await fetch('/api/training/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          workout_id: workout.id,
+          duration: timer,
+          exercises: workout.exercises,
+        }),
+      })
+
+      if (!response.ok) throw new Error('Erro ao completar treino')
+      
+      router.push('/dashboard/training')
+    } catch (error) {
+      console.error('Erro ao completar treino:', error)
     }
   }
 
@@ -137,10 +157,6 @@ export default function WorkoutDetailPage() {
     const secs = seconds % 60
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
-
-  const completedExercises = workout?.exercises.filter(e => e.completed).length || 0
-  const totalExercises = workout?.exercises.length || 0
-  const progress = totalExercises > 0 ? (completedExercises / totalExercises) * 100 : 0
 
   if (loading) {
     return (
@@ -157,61 +173,73 @@ export default function WorkoutDetailPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <p className="text-gray-600">Treino não encontrado</p>
-          <Button onClick={() => router.push('/dashboard/training')} className="mt-4 bg-black text-white">
-            Voltar
+          <XCircle className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Treino não encontrado</h3>
+          <Button onClick={() => router.push('/dashboard/training')} className="bg-black text-white hover:bg-gray-800">
+            Voltar para Treinos
           </Button>
         </div>
       </div>
     )
   }
 
+  const completedExercises = workout.exercises.filter((ex) => ex.completed).length
+  const totalExercises = workout.exercises.length
+  const progress = (completedExercises / totalExercises) * 100
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <Button
-            variant="outline"
-            onClick={() => router.push('/dashboard/training')}
-            className="border-gray-300 text-gray-700"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar
-          </Button>
           <div className="flex items-center gap-4">
-            <div className="text-right">
-              <p className="text-sm text-gray-600">Tempo</p>
-              <p className="text-2xl font-bold text-gray-900">{formatTime(timer)}</p>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => router.push('/dashboard/training')}
+              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">{workout.name}</h1>
+              <p className="text-gray-600 mt-1">{workout.day}</p>
             </div>
-            {workout.completed && (
-              <Badge className="bg-black text-white">Concluído</Badge>
-            )}
           </div>
+          <Badge className={workout.completed ? "bg-black text-white" : "bg-gray-200 text-gray-900"}>
+            {workout.completed ? "Concluído" : "Em andamento"}
+          </Badge>
         </div>
 
-        {/* Workout Info */}
+        {/* Timer & Progress */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl text-gray-900">{workout.name}</CardTitle>
-            <p className="text-gray-600">{workout.day}</p>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-600">Progresso</span>
-                  <span className="text-sm font-medium text-gray-900">
-                    {completedExercises}/{totalExercises} exercícios
-                  </span>
+          <CardContent className="py-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-4">
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-gray-900">{formatTime(timer)}</p>
+                  <p className="text-sm text-gray-600">Tempo decorrido</p>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-black h-2 rounded-full transition-all"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
+                <Button
+                  size="icon"
+                  onClick={() => setIsActive(!isActive)}
+                  className="bg-black text-white hover:bg-gray-800"
+                >
+                  {isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                </Button>
               </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-gray-900">
+                  {completedExercises}/{totalExercises}
+                </p>
+                <p className="text-sm text-gray-600">Exercícios</p>
+              </div>
+            </div>
+            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-black transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
             </div>
           </CardContent>
         </Card>
@@ -219,101 +247,108 @@ export default function WorkoutDetailPage() {
         {/* Exercises */}
         <div className="space-y-4">
           {workout.exercises.map((exercise, index) => (
-            <Card
-              key={exercise.id}
-              className={exercise.completed ? "bg-gray-50 border-gray-300" : ""}
-            >
+            <Card key={exercise.id} className={exercise.completed ? "bg-gray-50 border-gray-300" : ""}>
               <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-sm font-medium text-gray-600">
-                        Exercício {index + 1}
-                      </span>
-                      {exercise.completed && (
-                        <Badge className="bg-black text-white">
-                          <Check className="w-3 h-3" />
-                        </Badge>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        exercise.completed ? "bg-black text-white" : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      {exercise.completed ? (
+                        <CheckCircle2 className="w-5 h-5" />
+                      ) : (
+                        <span className="font-bold">{index + 1}</span>
                       )}
                     </div>
-                    <CardTitle className="text-gray-900">{exercise.name}</CardTitle>
+                    <div>
+                      <CardTitle className="text-gray-900">{exercise.name}</CardTitle>
+                      <CardDescription className="text-gray-600">
+                        {exercise.sets} séries × {exercise.reps} repetições
+                      </CardDescription>
+                    </div>
                   </div>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => substituteExercise(exercise.id)}
-                    className="border-gray-300 text-gray-700"
+                    className="border-gray-300 text-gray-700 hover:bg-gray-100"
                   >
-                    <RefreshCw className="w-4 h-4" />
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Substituir
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-sm text-gray-600">Séries</p>
-                      <p className="text-lg font-semibold text-gray-900">{exercise.sets}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Repetições</p>
-                      <p className="text-lg font-semibold text-gray-900">{exercise.reps}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Descanso</p>
-                      <p className="text-lg font-semibold text-gray-900">{exercise.rest}</p>
-                    </div>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Clock className="w-4 h-4" />
+                    <span>Descanso: {exercise.rest}</span>
                   </div>
-
-                  {exercise.notes && (
-                    <div className="bg-gray-100 p-3 rounded-lg">
-                      <p className="text-sm text-gray-700">{exercise.notes}</p>
-                    </div>
-                  )}
-
-                  <Button
-                    onClick={() => toggleExerciseComplete(exercise.id)}
-                    className={
-                      exercise.completed
-                        ? "w-full bg-gray-800 text-white hover:bg-gray-700"
-                        : "w-full bg-black text-white hover:bg-gray-800"
-                    }
-                  >
-                    {exercise.completed ? (
-                      <>
-                        <X className="w-4 h-4 mr-2" />
-                        Marcar como Não Concluído
-                      </>
-                    ) : (
-                      <>
-                        <Check className="w-4 h-4 mr-2" />
-                        Marcar como Concluído
-                      </>
-                    )}
-                  </Button>
+                  <div className="space-y-2">
+                    <Label htmlFor={`weight-${exercise.id}`} className="text-sm text-gray-600">
+                      Peso (kg)
+                    </Label>
+                    <Input
+                      id={`weight-${exercise.id}`}
+                      type="number"
+                      value={exercise.weight || ""}
+                      onChange={(e) => updateExerciseWeight(exercise.id, Number(e.target.value))}
+                      placeholder="0"
+                      className="border-gray-300"
+                    />
+                  </div>
                 </div>
+                {exercise.notes && (
+                  <div className="p-3 bg-gray-100 rounded-lg">
+                    <p className="text-sm text-gray-700">{exercise.notes}</p>
+                  </div>
+                )}
+                <Button
+                  onClick={() => toggleExercise(exercise.id)}
+                  className={
+                    exercise.completed
+                      ? "w-full bg-gray-300 text-gray-700 hover:bg-gray-400"
+                      : "w-full bg-black text-white hover:bg-gray-800"
+                  }
+                >
+                  {exercise.completed ? (
+                    <>
+                      <XCircle className="w-4 h-4 mr-2" />
+                      Marcar como não concluído
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
+                      Marcar como concluído
+                    </>
+                  )}
+                </Button>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Complete Workout Button */}
-        {!workout.completed && completedExercises === totalExercises && totalExercises > 0 && (
-          <Card className="bg-black text-white">
-            <CardContent className="py-6">
-              <div className="text-center space-y-4">
-                <h3 className="text-xl font-bold">Parabéns! 🎉</h3>
-                <p>Você completou todos os exercícios deste treino</p>
-                <Button
-                  onClick={completeWorkout}
-                  className="bg-white text-black hover:bg-gray-100"
-                >
-                  Finalizar Treino
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        {/* Complete Workout */}
+        <Card>
+          <CardContent className="py-6">
+            <Button
+              onClick={completeWorkout}
+              disabled={completedExercises !== totalExercises}
+              className="w-full bg-black text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:text-gray-500"
+              size="lg"
+            >
+              <Target className="w-5 h-5 mr-2" />
+              Finalizar Treino
+            </Button>
+            {completedExercises !== totalExercises && (
+              <p className="text-center text-sm text-gray-600 mt-2">
+                Complete todos os exercícios para finalizar
+              </p>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
